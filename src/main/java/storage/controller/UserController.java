@@ -36,13 +36,14 @@ public class UserController {
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<User> register(@RequestBody User user){
+	public ResponseEntity<User> register(@RequestBody User user) throws EmailExistException {
 	    User savedUser = userService.register(user);
-		 if(savedUser != null)
-		    return ResponseEntity.ok(savedUser);
-		 else {
-			return new ResponseEntity<>(null,HttpStatus.BAD_GATEWAY);
-		}
+	     if (savedUser != null) {
+	    	 return new ResponseEntity<>(savedUser, HttpStatus.OK);
+	     }
+	     else {
+	    	 throw new EmailExistException("Email already exists");
+	     }	 
 	}
 	
 	@PostMapping("/login")
